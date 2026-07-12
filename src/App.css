@@ -1,0 +1,27 @@
+.toolbar {
+  display: flex;
+
+  gap: 120px;
+
+  grid-template-columns: 500px 500px 500px;
+
+  align-items: center;
+
+  margin: 20px 0;
+
+  flex-wrap: wrap;
+}
+
+.expense-count {
+  margin: 10px 0;
+
+  font-weight: bold;
+}
+
+.app-container {
+  max-width: 1000px;
+
+  margin: 0 auto;
+
+  padding: 20px;
+}

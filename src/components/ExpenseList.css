@@ -1,0 +1,31 @@
+.expense-header {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: grid;
+
+  grid-template-columns:
+    230px
+    120px
+    120px
+    150px
+    150px
+    100px
+    100px;
+
+  align-items: center;
+
+  font-weight: bold;
+
+  border-bottom: 2px solid black;
+
+  margin-bottom: 10px;
+}
+
+.expense-container {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 15px;
+}

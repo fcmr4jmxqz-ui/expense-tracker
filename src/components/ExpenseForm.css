@@ -1,0 +1,32 @@
+.expense-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px; /* Space between all form elements */
+
+  max-width: 400px;
+}
+.editing-banner {
+  background-color: #fff3cd;
+
+  border: 1px solid #ffe69c;
+
+  padding: 10px;
+
+  margin-bottom: 10px;
+
+  border-radius: 6px;
+
+  font-weight: bold;
+}
+
+.expense-form input,
+.expense-form select,
+.expense-form button {
+  padding: 10px;
+  font-size: 16px;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+}
