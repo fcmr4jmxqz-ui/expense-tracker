@@ -122,9 +122,7 @@ function ExpensePage({
       }),
     );
   }
-  function setFormData(expense: Expense) {
-    setEditingExpense(expense);
-  }
+
   return (
     <div className="app-container">
       <h1>Expense Tracker</h1>
