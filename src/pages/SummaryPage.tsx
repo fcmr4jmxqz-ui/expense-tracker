@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { Expense } from "../types/Expense";
 import SummaryDashboard from "../components/SummaryDashboard";
+import SummaryExportButtons from "../components/SummaryExportButtons";
+import ComparisonDashboard from "../components/ComparisonDashboard";
 
 interface Props {
   expenses: Expense[];
@@ -8,6 +10,12 @@ interface Props {
 
 function SummaryPage({ expenses }: Props) {
   const [summaryPeriod, setSummaryPeriod] = useState("All");
+
+  const [periodA, setPeriodA] = useState("");
+
+  const [periodB, setPeriodB] = useState("");
+
+  const [errorMessage, setErrorMessage] = useState("");
 
   function getPeriod(date: string) {
     const expenseDate = new Date(date);
@@ -22,6 +30,14 @@ function SummaryPage({ expenses }: Props) {
   const availablePeriods = [
     ...new Set(expenses.map((expense) => getPeriod(expense.date))),
   ].sort((a, b) => b.localeCompare(a));
+
+  useEffect(() => {
+    if (availablePeriods.length >= 2 && periodA === "" && periodB === "") {
+      setPeriodA(availablePeriods[1]);
+
+      setPeriodB(availablePeriods[0]);
+    }
+  }, [availablePeriods, periodA, periodB]);
 
   const summaryExpenses = expenses.filter((expense) => {
     if (summaryPeriod === "All") {
@@ -57,11 +73,7 @@ function SummaryPage({ expenses }: Props) {
     }[],
   );
 
-  const totalAmount = categoryTotals.reduce(
-    (sum, item) => sum + item.total,
-
-    0,
-  );
+  const totalAmount = categoryTotals.reduce((sum, item) => sum + item.total, 0);
 
   const categorySummary = categoryTotals.map((item) => ({
     ...item,
@@ -79,16 +91,86 @@ function SummaryPage({ expenses }: Props) {
         )
       : null;
 
+  // ==========================
+  // COMPARISON DASHBOARD DATA
+  // ==========================
+
+  const periodAExpenses = expenses.filter(
+    (expense) => getPeriod(expense.date) === periodA,
+  );
+
+  const periodBExpenses = expenses.filter(
+    (expense) => getPeriod(expense.date) === periodB,
+  );
+
+  const totalA = periodAExpenses.reduce(
+    (sum, expense) => sum + expense.amount,
+    0,
+  );
+
+  const totalB = periodBExpenses.reduce(
+    (sum, expense) => sum + expense.amount,
+    0,
+  );
+
+  const allCategories = [
+    ...new Set(expenses.map((expense) => expense.category)),
+  ];
+
+  const comparisons = allCategories.map((category) => {
+    const periodATotal = periodAExpenses
+      .filter((expense) => expense.category === category)
+      .reduce((sum, expense) => sum + expense.amount, 0);
+
+    const periodBTotal = periodBExpenses
+      .filter((expense) => expense.category === category)
+      .reduce((sum, expense) => sum + expense.amount, 0);
+
+    return {
+      category,
+
+      periodATotal,
+
+      periodBTotal,
+
+      difference: periodBTotal - periodATotal,
+
+      percentage:
+        periodATotal === 0
+          ? periodBTotal === 0
+            ? "0"
+            : "NEW"
+          : (((periodBTotal - periodATotal) / periodATotal) * 100).toFixed(2),
+    };
+  });
+
   return (
-    <SummaryDashboard
-      categoryTotals={categorySummary}
-      totalAmount={totalAmount}
-      summaryPeriod={summaryPeriod}
-      setSummaryPeriod={setSummaryPeriod}
-      availablePeriods={availablePeriods}
-      categoryCount={categoryCount}
-      highestCategory={highestCategory}
-    />
+    <>
+      <SummaryDashboard
+        categoryTotals={categorySummary}
+        totalAmount={totalAmount}
+        summaryPeriod={summaryPeriod}
+        setSummaryPeriod={setSummaryPeriod}
+        availablePeriods={availablePeriods}
+        categoryCount={categoryCount}
+        highestCategory={highestCategory}
+      />
+
+      <SummaryExportButtons expenses={summaryExpenses} />
+
+      <ComparisonDashboard
+        periodA={periodA}
+        setPeriodA={setPeriodA}
+        periodB={periodB}
+        setPeriodB={setPeriodB}
+        availablePeriods={availablePeriods}
+        totalA={totalA}
+        totalB={totalB}
+        comparisons={comparisons}
+        setErrorMessage={setErrorMessage}
+        errorMessage={errorMessage}
+      />
+    </>
   );
 }
 

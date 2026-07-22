@@ -13,7 +13,6 @@ A React + TypeScript expense tracking application.
 - Sort expenses
 - Summary dashboard
 - Pie chart analytics
-- LocalStorage persistence
 
 ## Tech Stack
 
@@ -22,6 +21,7 @@ A React + TypeScript expense tracking application.
 - Vite
 - Recharts
 - CSS
+- Supabase
 
 ## Live Demo
 

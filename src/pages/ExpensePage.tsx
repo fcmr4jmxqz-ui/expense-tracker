@@ -1,5 +1,11 @@
 import { useState } from "react";
-
+import ExportButtons from "../components/ExportButtons";
+import {
+  getExpenses,
+  createExpense,
+  updateExpenseApi,
+  deleteExpenseApi,
+} from "../services/expenseAPI";
 import ExpenseForm from "../components/ExpenseForm";
 import ExpenseList from "../components/ExpenseList";
 import ExpenseFilter from "../components/ExpenseFilter";
@@ -103,24 +109,28 @@ function ExpensePage({
 
     .reduce((total, expense) => total + expense.amount, 0);
 
-  function addExpense(expense: Expense) {
-    setExpenses([...expenses, expense]);
+  async function addExpense(expense: Expense) {
+    await createExpense(expense);
+
+    const updatedExpenses = await getExpenses();
+
+    setExpenses(updatedExpenses);
   }
 
-  function deleteExpense(id: number) {
-    setExpenses(expenses.filter((expense) => expense.id !== id));
+  async function deleteExpense(id: number) {
+    await deleteExpenseApi(id);
+
+    const updatedExpenses = await getExpenses();
+
+    setExpenses(updatedExpenses);
   }
 
-  function updateExpense(updatedExpense: Expense) {
-    setExpenses(
-      expenses.map((expense) => {
-        if (expense.id === updatedExpense.id) {
-          return updatedExpense;
-        }
+  async function updateExpense(updatedExpense: Expense) {
+    await updateExpenseApi(updatedExpense);
 
-        return expense;
-      }),
-    );
+    const updatedExpenses = await getExpenses();
+
+    setExpenses(updatedExpenses);
   }
 
   return (
@@ -163,6 +173,8 @@ function ExpensePage({
       />
 
       <p>Displayed Expenses Total: RM {totalAmount}</p>
+
+      <ExportButtons expenses={expenses} filteredExpenses={sortedExpenses} />
     </div>
   );
 }

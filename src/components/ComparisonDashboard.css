@@ -1,0 +1,69 @@
+.comparison-dashboard {
+  margin-top: 40px;
+}
+
+.period-selector {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 30px;
+}
+
+.period-selector div {
+  display: flex;
+  flex-direction: column;
+}
+
+.comparison-summary {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 20px;
+}
+
+.comparison-card {
+  border: 1px solid #ddd;
+
+  padding: 20px;
+
+  border-radius: 10px;
+}
+
+.comparison-card p {
+  font-size: 24px;
+
+  font-weight: bold;
+}
+
+.comparison-table {
+  margin-top: 20px;
+}
+
+.comparison-header,
+.comparison-row {
+  display: grid;
+
+  grid-template-columns:
+    200px
+    150px
+    150px
+    150px;
+
+  padding: 12px;
+}
+
+.comparison-header {
+  font-weight: bold;
+
+  border-bottom: 2px solid black;
+}
+
+.comparison-row {
+  border-bottom: 1px solid #ddd;
+}
+
+.comparison-error {
+  margin-top: 10px;
+  color: red;
+  font-weight: bold;
+}
